@@ -85,6 +85,8 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
     'hbs': [1, 3, 4, 8, 9, 10, 12, 15, 17, 18, 19, 22, 23, 29, 32, 33],
     'hb': list(range(1, 34)),  # Full HB dataset.
     'ycbv': list(range(1, 22)),
+    'denstereo-left': list(range(1, 22)),
+    'denstereo-right': list(range(1, 22)),
     'hope': list(range(1, 29)),
   }[dataset_name]
 
@@ -103,6 +105,8 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
     'hbs': [10, 12, 18, 29],
     'hb': [6, 10, 11, 12, 13, 14, 18, 24, 29],
     'ycbv': [1, 13, 14, 16, 18, 19, 20, 21],
+    'denstereo-left': [1, 13, 14, 16, 18, 19, 20, 21],
+    'denstereo-right': [1, 13, 14, 16, 18, 19, 20, 21],
     'hope': None,  # Not defined yet.
   }[dataset_name]
 
@@ -337,6 +341,23 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       p['depth_range'] = (438.24, 1416.97)
       p['azimuth_range'] = (0, 2 * math.pi)
       p['elev_range'] = (-0.5 * math.pi, 0.5 * math.pi)
+
+  # Denstereo
+  elif dataset_name == 'denstereo-left':
+    if split == 'train':
+      p['scene_ids'] = {
+        'pbr': None,  # Use function get_present_scene_ids().
+      }[split_type]
+    p['im_size'] = (640, 480)
+
+  # Denstereo
+  elif dataset_name == 'denstereo-right':
+    if split == 'train':
+      p['scene_ids'] = {
+        'pbr': None,  # Use function get_present_scene_ids().
+      }[split_type]
+
+    p['im_size'] = (640, 480)
 
   # YCB-Video (YCBV).
   elif dataset_name == 'ycbv':
