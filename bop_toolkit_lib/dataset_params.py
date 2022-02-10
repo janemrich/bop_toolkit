@@ -380,6 +380,51 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       p['azimuth_range'] = (0, 2 * math.pi)
       p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
 
+  # Denstereo
+  elif dataset_name == 'denstereo-left':
+    if split == 'train' and split_type is None:
+      split_type = 'real'
+
+    if split == 'train':
+      p['scene_ids'] = {
+        'real': list(range(48)) + list(range(60, 92)),
+        'pbr': None,  # Use function get_present_scene_ids().
+        'synt': list(range(80))
+      }[split_type]
+    elif split == 'test':
+      # p['scene_ids'] = list(range(48, 60))
+      return NotImplementedError
+
+    p['im_size'] = (640, 480)
+
+    if split == 'test':
+      p['depth_range'] = (612.92, 1243.59)
+      # p['azimuth_range'] = (0, 2 * math.pi)
+      # p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
+
+  # Denstereo
+  elif dataset_name == 'denstereo-right':
+    if split == 'train' and split_type is None:
+      split_type = 'real'
+
+    if split == 'train':
+      p['scene_ids'] = {
+        'real': list(range(48)) + list(range(60, 92)),
+        'pbr': None,  # Use function get_present_scene_ids().
+        'synt': list(range(80))
+      }[split_type]
+    elif split == 'test':
+      # p['scene_ids'] = list(range(48, 60))
+      return NotImplementedError
+
+    p['im_size'] = (640, 480)
+
+    if split == 'test':
+      p['depth_range'] = (612.92, 1243.59)
+      # p['azimuth_range'] = (0, 2 * math.pi)
+      # p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
+
+
   # HOPE.
   elif dataset_name == 'hope':
     p['scene_ids'] = {
@@ -455,8 +500,10 @@ def get_present_scene_ids(dp_split):
   :param dp_split: Path to a folder with datasets.
   :return: List with scene ID's.
   """
+  print('split path', dp_split['split_path'])
   scene_dirs = [d for d in glob.glob(os.path.join(dp_split['split_path'], '*'))
                 if os.path.isdir(d)]
   scene_ids = [int(os.path.basename(scene_dir)) for scene_dir in scene_dirs]
+  print('scene_dir', scene_dirs)
   scene_ids = sorted(scene_ids)
   return scene_ids
