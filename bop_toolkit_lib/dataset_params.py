@@ -71,6 +71,7 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
   :param model_type: Type of object models.
   :return: Dictionary with object model parameters for the specified dataset.
   """
+  # print(dataset_name)
   # Object ID's.
   obj_ids = {
     'lm': list(range(1, 16)),
@@ -85,8 +86,8 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
     'hbs': [1, 3, 4, 8, 9, 10, 12, 15, 17, 18, 19, 22, 23, 29, 32, 33],
     'hb': list(range(1, 34)),  # Full HB dataset.
     'ycbv': list(range(1, 22)),
-    'denstereo-left': list(range(1, 22)),
-    'denstereo-right': list(range(1, 22)),
+    'denstereo': list(range(1, 22)),
+    'denstereo-test': list(range(1, 22)),
     'hope': list(range(1, 29)),
   }[dataset_name]
 
@@ -105,8 +106,7 @@ def get_model_params(datasets_path, dataset_name, model_type=None):
     'hbs': [10, 12, 18, 29],
     'hb': [6, 10, 11, 12, 13, 14, 18, 24, 29],
     'ycbv': [1, 13, 14, 16, 18, 19, 20, 21],
-    'denstereo-left': [1, 13, 14, 16, 18, 19, 20, 21],
-    'denstereo-right': [1, 13, 14, 16, 18, 19, 20, 21],
+    'denstereo-test': [1, 13, 14, 16, 18, 19, 20, 21],
     'hope': None,  # Not defined yet.
   }[dataset_name]
 
@@ -381,18 +381,17 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
 
   # Denstereo
-  elif dataset_name == 'denstereo-left':
+  elif dataset_name == 'denstereo':
     if split == 'train' and split_type is None:
       split_type = 'real'
 
     if split == 'train':
       p['scene_ids'] = {
-        'real': list(range(48)) + list(range(60, 92)),
-        'pbr': None,  # Use function get_present_scene_ids().
-        'synt': list(range(80))
+        'pbr_left': list(range(0, 50)),  # Use function get_present_scene_ids().
+        'pbr_right': list(range(0, 50)),  # Use function get_present_scene_ids().
       }[split_type]
     elif split == 'test':
-      # p['scene_ids'] = list(range(48, 60))
+      # p['scene_ids'] = list(range(46, 49))
       return NotImplementedError
 
     p['im_size'] = (640, 480)
@@ -401,20 +400,18 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       p['depth_range'] = (612.92, 1243.59)
       # p['azimuth_range'] = (0, 2 * math.pi)
       # p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
-
   # Denstereo
-  elif dataset_name == 'denstereo-right':
+  elif dataset_name == 'denstereo-test':
     if split == 'train' and split_type is None:
       split_type = 'real'
 
     if split == 'train':
       p['scene_ids'] = {
-        'real': list(range(48)) + list(range(60, 92)),
-        'pbr': None,  # Use function get_present_scene_ids().
-        'synt': list(range(80))
+        'pbr_left': [0],  # Use function get_present_scene_ids().
+        'pbr_right': [0],  # Use function get_present_scene_ids().
       }[split_type]
     elif split == 'test':
-      # p['scene_ids'] = list(range(48, 60))
+      # p['scene_ids'] = list(range(46, 49))
       return NotImplementedError
 
     p['im_size'] = (640, 480)
@@ -423,7 +420,6 @@ def get_split_params(datasets_path, dataset_name, split, split_type=None):
       p['depth_range'] = (612.92, 1243.59)
       # p['azimuth_range'] = (0, 2 * math.pi)
       # p['elev_range'] = (-1.2788, 1.1291)  # (-73.27, 64.69) [deg].
-
 
   # HOPE.
   elif dataset_name == 'hope':
